@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0b10" />
+  <title>Chocolate Brats Studios</title>
+
+  <style>
+    :root{
+      --bg:#0b0b10;
+      --card:#101018;
+      --muted:#8e90a6;
+      --text:#f3f4ff;
+      --line:rgba(255,255,255,.10);
+
+      --pill:#151525;
+      --green:#4ade80;
+      --pink:#ff2d55;
+      --blue:#2f88ff;
+      --amber:#ffb020;
+      --purple:#a855f7;
+
+      --shadow: 0 10px 30px rgba(0,0,0,.45);
+      --radius: 22px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 700px at 50% -200px, rgba(168,85,247,.20), transparent 60%),
+                  radial-gradient(900px 600px at 80% 20%, rgba(47,136,255,.16), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      -webkit-tap-highlight-color: transparent;
+      overflow-x:hidden;
+    }
+
+    /* App shell */
+    .app{
+      min-height:100%;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      padding: 14px 14px 10px;
+      background: linear-gradient(to bottom, rgba(11,11,16,.92), rgba(11,11,16,.55), transparent);
+      backdrop-filter: blur(10px);
+    }
+
+    .toprow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .iconbtn{
+      width:40px;height:40px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      display:grid;
+      place-items:center;
+      box-shadow: 0 6px 18px rgba(0,0,0,.25);
+      cursor:pointer;
+      user-select:none;
+    }
+    .iconbtn:active{transform:scale(.98)}
+    .iconbtn svg{width:20px;height:20px;opacity:.95}
+
+    .tabs{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      flex: 1;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+    .tab{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      padding:10px 16px;
+      border-radius: 999px;
+      font-weight: 650;
+      font-size: 14px;
+      letter-spacing:.2px;
+      cursor:pointer;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .tab.active{
+      background: rgba(255,255,255,.12);
+      border-color: rgba(255,255,255,.18);
+    }
+
+    .bolt{
+      display:flex;align-items:center;gap:6px;
+      font-weight:700;font-size:13px;
+      color:#e9ddff;
+    }
+    .bolt svg{width:18px;height:18px;color:var(--purple)}
+
+    /* Story/progress bars */
+    .progress{
+      margin-top:12px;
+      display:flex;
+      gap:6px;
+      padding: 0 4px;
+    }
+    .bar{
+      height:4px;
+      flex:1;
+      border-radius: 99px;
+      background: rgba(255,255,255,.10);
+      overflow:hidden;
+      position:relative;
+    }
+    .bar > i{
+      position:absolute;inset:0;
+      width: 55%;
+      background: rgba(255,255,255,.65);
+      border-radius:99px;
+      display:block;
+    }
+
+    /* Main card */
+    .stage{
+      padding: 6px 14px 0;
+    }
+    .card{
+      position:relative;
+      border-radius: var(--radius);
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      background: #0f0f16;
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .photo{
+      width:100%;
+      aspect-ratio: 9 / 16;
+      background: #141420;
+      position:relative;
+    }
+    .photo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter: saturate(1.08) contrast(1.02);
+    }
+    .photo::after{
+      content:"";
+      position:absolute;inset:0;
+      background: linear-gradient(to bottom, rgba(0,0,0,.0) 35%, rgba(0,0,0,.25) 70%, rgba(0,0,0,.78) 100%);
+      pointer-events:none;
+    }
+
+    /* Overlay chips + details */
+    .status{
+      position:absolute;
+      left:14px;
+      bottom:120px;
+      z-index:3;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(34,197,94,.14);
+      border: 1px solid rgba(34,197,94,.28);
+      color: #d9ffe7;
+      font-weight: 700;
+      font-size: 13px;
+      backdrop-filter: blur(8px);
+    }
+    .dot{
+      width:8px;height:8px;border-radius:99px;background: var(--green);
+      box-shadow: 0 0 0 4px rgba(74,222,128,.16);
+    }
+
+    .profileinfo{
+      position:absolute;
+      left:14px;
+      right:14px;
+      bottom:16px;
+      z-index:3;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .nameblock{
+      min-width:0;
+    }
+    .name{
+      font-size: 34px;
+      line-height: 1.05;
+      margin:0;
+      font-weight: 850;
+      letter-spacing: .2px;
+      text-shadow: 0 8px 24px rgba(0,0,0,.55);
+    }
+    .age{
+      font-weight: 800;
+      opacity:.95;
+      margin-left: 8px;
+      font-size: 24px;
+      vertical-align: baseline;
+    }
+    .sub{
+      margin-top:6px;
+      color: rgba(255,255,255,.78);
+      font-size: 14px;
+      max-width: 80%;
+      text-shadow: 0 6px 18px rgba(0,0,0,.45);
+    }
+
+    .upbtn{
+      width:46px;height:46px;border-radius: 999px;
+      border:1px solid rgba(255,255,255,.20);
+      background: rgba(255,255,255,.10);
+      backdrop-filter: blur(10px);
+      display:grid;place-items:center;
+      cursor:pointer;
+      box-shadow: 0 10px 26px rgba(0,0,0,.35);
+      flex:0 0 auto;
+    }
+    .upbtn:active{transform:scale(.98)}
+    .upbtn svg{width:20px;height:20px}
+
+    /* Action row */
+    .actions{
+      position:relative;
+      margin-top:-18px;
+      padding: 0 14px;
+      z-index:25;
+    }
+    .actiontray{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      background: rgba(16,16,24,.78);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: 999px;
+      padding: 12px 14px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 26px rgba(0,0,0,.35);
+    }
+    .act{
+      width:54px;height:54px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .12s ease, background .12s ease;
+    }
+    .act:active{transform:scale(.96)}
+    .act svg{width:22px;height:22px}
+
+    .act.rewind svg{color: var(--amber)}
+    .act.nope svg{color: var(--pink)}
+    .act.star svg{color: #60a5fa}
+    .act.like svg{color: var(--green)}
+    .act.send svg{color: var(--blue)}
+
+    /* Bottom nav */
+    .bottomnav{
+      position:sticky;
+      bottom:0;
+      z-index:30;
+      padding: 10px 14px calc(12px + env(safe-area-inset-bottom));
+      background: linear-gradient(to top, rgba(11,11,16,.92), rgba(11,11,16,.60), transparent);
+      backdrop-filter: blur(10px);
+      margin-top: 10px;
+    }
+    .navwrap{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:8px;
+      background: rgba(16,16,24,.60);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: 20px;
+      padding: 10px 8px;
+      box-shadow: 0 10px 26px rgba(0,0,0,.35);
+    }
+    .navitem{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      color: rgba(255,255,255,.70);
+      font-size: 12px;
+      cursor:pointer;
+      padding: 8px 6px;
+      border-radius: 14px;
+      user-select:none;
+      position:relative;
+    }
+    .navitem.active{
+      color: rgba(255,255,255,.92);
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .navitem svg{width:22px;height:22px}
+    .badge{
+      position:absolute;
+      top:2px;
+      right:18px;
+      background: rgba(255,191,36,.95);
+      color: #111;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      box-shadow: 0 8px 18px rgba(0,0,0,.35);
+    }
+    .dotbadge{
+      position:absolute;
+      top:6px;
+      right:26px;
+      width:8px;height:8px;border-radius:99px;
+      background: #ff3b30;
+      box-shadow: 0 6px 14px rgba(0,0,0,.35);
+    }
+
+    /* Tiny toast */
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom: calc(110px + env(safe-area-inset-bottom));
+      transform: translateX(-50%) translateY(20px);
+      opacity:0;
+      pointer-events:none;
+      background: rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.16);
+      backdrop-filter: blur(12px);
+      color: rgba(255,255,255,.92);
+      padding: 10px 14px;
+      border-radius: 999px;
+      box-shadow: 0 14px 34px rgba(0,0,0,.45);
+      transition: opacity .18s ease, transform .18s ease;
+      font-weight: 650;
+      font-size: 13px;
+      max-width: calc(100% - 28px);
+      text-align:center;
+      z-index:50;
+    }
+    .toast.show{
+      opacity:1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Prevent image dragging */
+    img{ -webkit-user-drag:none; user-select:none; }
+
+    /* Nice tap areas for iOS */
+    button{ font: inherit; }
+
+    /* Desktop preview */
+    @media (min-width: 520px){
+      body{display:flex;justify-content:center}
+      .app{width: 420px}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app" id="app">
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="toprow">
+        <div class="iconbtn" id="btnFilters" aria-label="Filters">
+          <!-- sliders icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 21v-7"></path>
+            <path d="M4 10V3"></path>
+            <path d="M12 21v-9"></path>
+            <path d="M12 8V3"></path>
+            <path d="M20 21v-5"></path>
+            <path d="M20 12V3"></path>
+            <path d="M2 14h4"></path>
+            <path d="M10 8h4"></path>
+            <path d="M18 16h4"></path>
+          </svg>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Feed tabs">
+          <div class="tab active" role="tab" aria-selected="true" id="tabForYou">For You</div>
+          <div class="tab" role="tab" aria-selected="false" id="tabDoubleDate">Double Date</div>
+        </div>
+
+        <div class="iconbtn" id="btnBoost" aria-label="Boost">
+          <div class="bolt" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M13 2L3 14h7l-1 8 12-14h-7l-1-6z"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="progress" aria-hidden="true">
+        <div class="bar"><i></i></div>
+        <div class="bar"><i style="width:0%"></i></div>
+        <div class="bar"><i style="width:0%"></i></div>
+        <div class="bar"><i style="width:0%"></i></div>
+      </div>
+    </header>
+
+    <!-- MAIN CARD -->
+    <main class="stage">
+      <section class="card" aria-label="Profile card">
+        <div class="photo">
+          <!-- Replace profile.jpg with your image file (same folder), or a URL -->
+          <img
+            src="profile.jpg"
+            alt="Profile photo"
+            onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, rgba(255,45,85,.20), rgba(168,85,247,.18), rgba(47,136,255,.16))';"
+          />
+
+          <div class="status">
+            <span class="dot" aria-hidden="true"></span>
+            Active
+          </div>
+
+          <div class="profileinfo">
+            <div class="nameblock">
+              <h1 class="name">Amahle <span class="age">20</span></h1>
+              <div class="sub">Cant see likes …text</div>
+            </div>
+
+            <div class="upbtn" id="btnMore" aria-label="More details">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 15l-6-6-6 6"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ACTION BUTTONS -->
+    <section class="actions" aria-label="Actions">
+      <div class="actiontray">
+        <div class="act rewind" data-action="rewind" aria-label="Rewind">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7v6h6"></path>
+            <path d="M3 13a9 9 0 1 0 3-6.7L3 7"></path>
+          </svg>
+        </div>
+
+        <div class="act nope" data-action="nope" aria-label="Nope">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6L6 18"></path>
+            <path d="M6 6l12 12"></path>
+          </svg>
+        </div>
+
+        <div class="act star" data-action="superlike" aria-label="Star">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 17.3l-6.18 3.7 1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.46 4.73L18.18 21 12 17.3z"></path>
+          </svg>
+        </div>
+
+        <div class="act like" data-action="like" aria-label="Like">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 21s-7-4.35-9.33-8.28C.57 9.05 2.25 5.5 6 5.5c1.9 0 3.27 1.03 4 2.02.73-.99 2.1-2.02 4-2.02 3.75 0 5.43 3.55 3.33 7.22C19 16.65 12 21 12 21z"></path>
+          </svg>
+        </div>
+
+        <div class="act send" data-action="send" aria-label="Send">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 2L11 13"></path>
+            <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottomnav" aria-label="Bottom navigation">
+      <div class="navwrap">
+        <div class="navitem active" data-nav="swipe" aria-label="Swipe">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v18"></path>
+            <path d="M5 10l7-7 7 7"></path>
+            <path d="M19 14l-7 7-7-7"></path>
+          </svg>
+          <div>Swipe</div>
+        </div>
+
+        <div class="navitem" data-nav="explore" aria-label="Explore">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M16 8l-2.5 7L6 18l7-2.5L16 8z"></path>
+          </svg>
+          <div>Explore</div>
+        </div>
+
+        <div class="navitem" data-nav="likes" aria-label="Likes">
+          <span class="badge">99+</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 22l7.8-8.6 1-1a5.5 5.5 0 0 0 0-7.8z"></path>
+          </svg>
+          <div>Likes</div>
+        </div>
+
+        <div class="navitem" data-nav="chat" aria-label="Chat">
+          <span class="dotbadge" aria-hidden="true"></span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
+          </svg>
+          <div>Chat</div>
+        </div>
+
+        <div class="navitem" data-nav="profile" aria-label="Profile">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21a8 8 0 0 0-16 0"></path>
+            <circle cx="12" cy="8" r="4"></circle>
+          </svg>
+          <div>Profile</div>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // Chocolate Brats Studios - simple UI interactions
+    const toast = document.getElementById("toast");
+    const showToast = (msg) => {
+      toast.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => toast.classList.remove("show"), 1300);
+    };
+
+    // Tabs
+    const tabForYou = document.getElementById("tabForYou");
+    const tabDoubleDate = document.getElementById("tabDoubleDate");
+    function setTab(active) {
+      const isForYou = active === "foryou";
+      tabForYou.classList.toggle("active", isForYou);
+      tabForYou.setAttribute("aria-selected", isForYou);
+      tabDoubleDate.classList.toggle("active", !isForYou);
+      tabDoubleDate.setAttribute("aria-selected", !isForYou);
+      showToast(isForYou ? "For You" : "Double Date");
+    }
+    tabForYou.addEventListener("click", () => setTab("foryou"));
+    tabDoubleDate.addEventListener("click", () => setTab("double"));
+
+    // Header buttons
+    document.getElementById("btnFilters").addEventListener("click", () => showToast("Filters"));
+    document.getElementById("btnBoost").addEventListener("click", () => showToast("Boost"));
+    document.getElementById("btnMore").addEventListener("click", () => showToast("More details"));
+
+    // Action buttons
+    document.querySelectorAll("[data-action]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const a = btn.getAttribute("data-action");
+        const map = {
+          rewind: "Rewind",
+          nope: "Nope",
+          superlike: "Star",
+          like: "Like",
+          send: "Send"
+        };
+        showToast(map[a] || a);
+      });
+    });
+
+    // Bottom nav
+    document.querySelectorAll("[data-nav]").forEach(item => {
+      item.addEventListener("click", () => {
+        document.querySelectorAll(".navitem").forEach(n => n.classList.remove("active"));
+        item.classList.add("active");
+        showToast(item.getAttribute("data-nav").toUpperCase());
+      });
+    });
+
+    // Tiny "story bar" animation for the first bar
+    const firstBar = document.querySelector(".bar > i");
+    let w = 55;
+    setInterval(() => {
+      w += 1.1;
+      if (w > 100) w = 0;
+      firstBar.style.width = w + "%";
+    }, 120);
+
+    // Optional: basic swipe hint (doesn't change card, just toast)
+    let startX = null;
+    const card = document.querySelector(".card");
+    card.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; }, {passive:true});
+    card.addEventListener("touchend", (e) => {
+      if (startX === null) return;
+      const endX = e.changedTouches[0].clientX;
+      const dx = endX - startX;
+      startX = null;
+      if (Math.abs(dx) < 60) return;
+      showToast(dx > 0 ? "Swipe → (Like)" : "Swipe ← (Nope)");
+    }, {passive:true});
+  </script>
+</body>
+</html>
