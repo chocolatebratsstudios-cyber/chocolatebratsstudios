@@ -1,3 +1,534 @@
-<body style="background: url('Images/main.jpg') no-repeat center/cover, var(--bg);">
-    <!-- Other content -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chocolate Brats Studios</title>
+  <meta name="description" content="Chocolate Brats Studios — official hub. Profiles, videos, galleries, and links." />
+  <meta name="theme-color" content="#0b0706" />
+
+  <style>
+    :root{
+      /* Brand tokens (match your logo’s chocolate + gold) */
+      --bg: #070504;
+      --panel: rgba(255,255,255,.06);
+      --panel-2: rgba(255,255,255,.10);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.68);
+
+      --gold: #d6b06a;
+      --gold-2:#f1d59b;
+      --cocoa:#3b241a;
+      --border: rgba(214,176,106,.35);
+
+      --radius: 22px;
+      --radius-lg: 28px;
+
+      --shadow: 0 18px 40px rgba(0,0,0,.55);
+      --shadow-soft: 0 10px 25px rgba(0,0,0,.35);
+
+      --max: 980px;
+    }
+
+    *{ box-sizing: border-box; }
+    html,body{ height: 100%; }
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 600px at 70% -10%, rgba(214,176,106,.22), transparent 60%),
+        radial-gradient(900px 500px at 10% 20%, rgba(59,36,26,.45), transparent 55%),
+        linear-gradient(180deg, #050302, #0b0706 40%, #050302);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    a{ color: inherit; }
+    .wrap{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 18px 14px 44px;
+    }
+
+    /* Top bar */
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 10px 8px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .brand img{
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      object-fit: contain;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow-soft);
+    }
+    .brand .titles{
+      display:flex;
+      flex-direction:column;
+      line-height: 1.05;
+      min-width:0;
+    }
+    .brand .titles strong{
+      font-size: 16px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .brand .titles span{
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      text-decoration:none;
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .pill:focus{ outline: 3px solid rgba(214,176,106,.35); outline-offset: 2px; }
+
+    /* Hero */
+    .hero{
+      margin-top: 10px;
+      border-radius: var(--radius-lg);
+      overflow:hidden;
+      position: relative;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.10);
+      background: #0a0605;
+    }
+    .hero .image{
+      height: 340px;
+      background:
+        linear-gradient(90deg, rgba(5,3,2,.95), rgba(5,3,2,.35) 55%, rgba(5,3,2,.92)),
+        url("images/main.jpg") center/cover no-repeat;
+      filter: saturate(1.05) contrast(1.05);
+    }
+    .hero .overlay{
+      position:absolute;
+      inset: 0;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      padding: 18px 16px 16px;
+      gap: 12px;
+    }
+    .hero h1{
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .hero p{
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.35;
+      max-width: 56ch;
+    }
+    .hero .ctaRow{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    /* Sections */
+    .grid{
+      margin-top: 16px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 860px){
+      .grid{ grid-template-columns: 1.25fr .75fr; }
+      .hero .image{ height: 380px; }
+    }
+
+    .card{
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding: 14px 14px 10px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .card .hd h2{
+      margin:0;
+      font-size: 14px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .card .hd span{
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .card .bd{ padding: 14px; }
+
+    /* Buttons */
+    .btnList{
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+    .btn{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 14px 14px;
+      border-radius: 999px;
+      text-decoration:none;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      background: rgba(0,0,0,.20);
+      border: 1px solid var(--border);
+      color: var(--text);
+      position: relative;
+      overflow:hidden;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      user-select:none;
+    }
+    .btn::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(500px 120px at 50% 0%, rgba(214,176,106,.26), transparent 55%);
+      opacity: .85;
+      pointer-events:none;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(214,176,106,.10);
+      border-color: rgba(214,176,106,.55);
+    }
+    .btn:active{ transform: translateY(0px) scale(.99); }
+    .btn:focus{ outline: 3px solid rgba(214,176,106,.35); outline-offset: 3px; }
+
+    .btn.primary{
+      background: linear-gradient(180deg, rgba(214,176,106,.20), rgba(0,0,0,.25));
+      border-color: rgba(214,176,106,.65);
+    }
+
+    /* Profile card */
+    .profile{
+      display:flex;
+      gap: 14px;
+      align-items:center;
+    }
+    .avatar{
+      width: 74px;
+      height: 74px;
+      border-radius: 22px;
+      object-fit: cover;
+      border: 1px solid rgba(214,176,106,.35);
+      box-shadow: var(--shadow-soft);
+      background: rgba(255,255,255,.04);
+      flex: 0 0 auto;
+    }
+    .meta{
+      min-width: 0;
+      display:flex;
+      flex-direction:column;
+      gap: 4px;
+    }
+    .meta strong{
+      font-size: 16px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .meta em{
+      font-style: normal;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.3;
+    }
+
+    /* Gallery */
+    dialog{
+      width: min(920px, calc(100% - 24px));
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: var(--radius-lg);
+      background: #0b0706;
+      color: var(--text);
+      box-shadow: var(--shadow);
+      padding: 0;
+    }
+    dialog::backdrop{
+      background: rgba(0,0,0,.72);
+      backdrop-filter: blur(3px);
+    }
+    .dlgTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 12px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .dlgTop strong{
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+    .closeBtn{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 10px;
+      cursor:pointer;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+    .gallery{
+      padding: 12px;
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    @media (min-width: 740px){
+      .gallery{ grid-template-columns: repeat(4, 1fr); }
+    }
+    .gallery img{
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+    }
+
+    footer{
+      margin-top: 18px;
+      padding: 12px 6px 0;
+      text-align:center;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .08em;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <img src="images/logo.png" alt="Chocolate Brats Studios logo" />
+        <div class="titles">
+          <strong>Chocolate Brats Studios</strong>
+          <span>Official Hub</span>
+        </div>
+      </div>
+
+      <!-- Optional: put your main social / contact here -->
+      <a class="pill" href="#links">Quick Links</a>
+    </header>
+
+    <section class="hero" aria-label="Hero">
+      <div class="image" role="img" aria-label="Chocolate Brats Studios featured image"></div>
+      <div class="overlay">
+        <h1>Studio • Profiles • Videos</h1>
+        <p>
+          A premium, chocolate-gold experience. Explore featured profiles, galleries, and official links.
+        </p>
+        <div class="ctaRow">
+          <a class="pill" href="#profiles">Profiles</a>
+          <a class="pill" href="#videos">Videos</a>
+          <a class="pill" href="#links">Links</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <!-- Left: Featured / About -->
+      <section class="card" id="profiles" aria-label="Featured profile">
+        <div class="hd">
+          <h2>Featured Profile</h2>
+          <span>Chocolate Brandy</span>
+        </div>
+        <div class="bd">
+          <div class="profile">
+            <img
+              class="avatar"
+              src="profiles/chocolatebrandy/images/headshot_brandy.jpg"
+              alt="Chocolate Brandy headshot"
+            />
+            <div class="meta">
+              <strong>Chocolate Brandy</strong>
+              <em>
+                Add a 1–2 line description here that matches your vibe (premium / studio / creator / content).
+              </em>
+            </div>
+          </div>
+
+          <div style="height:12px"></div>
+
+          <div class="btnList">
+            <button class="btn primary" type="button" data-open-gallery="brandy">View Gallery</button>
+
+            <!-- You can point these to real pages later if you add them -->
+            <a class="btn" href="#videos">Watch Videos</a>
+            <a class="btn" href="#links">Official Links</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Main action buttons (link-in-bio style, but branded) -->
+      <section class="card" aria-label="Main actions">
+        <div class="hd">
+          <h2>Studio Actions</h2>
+          <span>Tap to open</span>
+        </div>
+        <div class="bd">
+          <div class="btnList">
+            <!-- Replace hrefs with your real URLs -->
+            <a class="btn primary" href="#links">Subscribe / Follow</a>
+            <a class="btn" href="#profiles">View Profiles</a>
+            <a class="btn" href="#videos">Latest Videos</a>
+            <a class="btn" href="#links">Store / Booking / Contact</a>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Videos section placeholder (wire it to your actual files/embeds) -->
+    <section class="card" id="videos" style="margin-top:14px" aria-label="Videos">
+      <div class="hd">
+        <h2>Videos</h2>
+        <span>Coming from your videos folders</span>
+      </div>
+      <div class="bd">
+        <p style="margin:0;color:var(--muted);line-height:1.4">
+          Add your video thumbnails or embeds here. If you have local MP4 files, you can use
+          &lt;video controls&gt; tags, or link out to YouTube / socials.
+        </p>
+
+        <div style="height:12px"></div>
+        <div class="btnList">
+          <a class="btn" href="#links">Watch on Platform</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Links section -->
+    <section class="card" id="links" style="margin-top:14px" aria-label="Links">
+      <div class="hd">
+        <h2>Official Links</h2>
+        <span>Social • Contact • More</span>
+      </div>
+      <div class="bd">
+        <div class="btnList" id="dynamicLinks">
+          <!-- JS will populate these from config below -->
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      © <span id="yr"></span> Chocolate Brats Studios • All rights reserved
+    </footer>
+  </div>
+
+  <!-- Gallery dialog -->
+  <dialog id="galleryDialog">
+    <div class="dlgTop">
+      <strong id="galleryTitle">Gallery</strong>
+      <button class="closeBtn" type="button" id="closeDialog">Close</button>
+    </div>
+    <div class="gallery" id="galleryGrid"></div>
+  </dialog>
+
+  <script>
+    // ✅ Add more profiles here later (same structure for videos/links/buttons)
+    const SITE = {
+      links: [
+        { label: "Instagram", url: "#" },
+        { label: "TikTok", url: "#" },
+        { label: "YouTube", url: "#" },
+        { label: "Contact", url: "mailto:you@example.com" }
+      ],
+      profiles: {
+        brandy: {
+          name: "Chocolate Brandy",
+          gallery: [
+            "profiles/chocolatebrandy/images/headshot_brandy.jpg",
+            "profiles/chocolatebrandy/images/image1_brandy.jpg",
+            "profiles/chocolatebrandy/images/image2_brandy.jpg",
+            "profiles/chocolatebrandy/images/image3_brandy.jpg"
+          ]
+        }
+      }
+    };
+
+    // Populate links
+    const linkWrap = document.getElementById("dynamicLinks");
+    SITE.links.forEach(item => {
+      const a = document.createElement("a");
+      a.className = "btn";
+      a.href = item.url;
+      a.textContent = item.label;
+      a.rel = "noopener";
+      linkWrap.appendChild(a);
+    });
+
+    // Gallery handling
+    const dlg = document.getElementById("galleryDialog");
+    const grid = document.getElementById("galleryGrid");
+    const title = document.getElementById("galleryTitle");
+
+    document.querySelectorAll("[data-open-gallery]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const key = btn.getAttribute("data-open-gallery");
+        const profile = SITE.profiles[key];
+        if (!profile) return;
+
+        title.textContent = profile.name + " — Gallery";
+        grid.innerHTML = "";
+
+        profile.gallery.forEach(src => {
+          const img = document.createElement("img");
+          img.src = src;
+          img.alt = profile.name + " gallery image";
+          grid.appendChild(img);
+        });
+
+        dlg.showModal();
+      });
+    });
+
+    document.getElementById("closeDialog").addEventListener("click", () => dlg.close());
+    document.getElementById("yr").textContent = new Date().getFullYear();
+  </script>
 </body>
+</html>
